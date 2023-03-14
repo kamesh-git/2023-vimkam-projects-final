@@ -21,7 +21,8 @@ uint8_t buflen = sizeof(buf);
 if (rf_driver.recv(buf, &buflen))
 {
 // Message received with valid che-cksum
+String buf1 = String((char*)buf);
 Serial.print("Message Received: ");
-Serial.println((char*)buf);
+Serial.println(buf1);
 }
 }
