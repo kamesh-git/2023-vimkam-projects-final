@@ -16,14 +16,14 @@
 
 #define WIFI_SSID         "Galaxy M11"    
 #define WIFI_PASS         "arulsamsung"
-#define APP_KEY           "c94be506-6030-4001-8d40-516c5db22d78"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "fb5c5c28-2431-4e4f-84fc-2856354ccbb7-2df3fee6-d690-4de6-b5fc-4cf310315851"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
+#define APP_KEY           "1cddf4cc-53c4-497f-bfb9-4525fdb3d64a"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
+#define APP_SECRET        "9e19e8c3-86d9-48d8-970c-21d8bc7619e1-5f2c57f6-deb8-4396-9e64-f7773971d9d6"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
 
 //Enter the device IDs here
-#define device_ID_1   "SWITCH_ID_NO_1_HERE"
-#define device_ID_2   "62c95ad3ad95bfbcdf38e8bd"
-#define device_ID_3   "62c95aeb0aec232058f88b85"
-#define device_ID_4   "62c96ee20aec232058f892ab"
+#define device_ID_1   "nothing"
+#define device_ID_2   "6413cb011bb4e19c11b87655"
+#define device_ID_3   "6413ca971bb4e19c11b87518"
+#define device_ID_4   "6413cadf1bb4e19c11b875e3"
 
 // define the GPIO connected with Relays and switches
 #define RelayPin1 5  //D1
@@ -98,9 +98,9 @@ void setupFlipSwitches() {
 
 bool onPowerState(String deviceId, bool &state)
 {
-  Serial.printf("%s: %s\r\n", deviceId.c_str(), state ? "on" : "off");
+  Serial.printf("%s: %s\r\n", deviceId.c_str(), !state ? "on" : "off");
   int relayPIN = devices[deviceId].relayPIN; // get the relay pin for corresponding device
-  digitalWrite(relayPIN, state);             // set the new relay state
+  digitalWrite(relayPIN, !state);             // set the new relay state
   return true;
 }
 
@@ -113,11 +113,17 @@ void handleFlipSwitches() {
 
       int flipSwitchPIN = flipSwitch.first;                                       // get the flipSwitch pin from configuration
       bool lastFlipSwitchState = flipSwitch.second.lastFlipSwitchState;           // get the lastFlipSwitchState
-      bool flipSwitchState = digitalRead(flipSwitchPIN);                          // read the current flipSwitch state
+      bool flipSwitchState = digitalRead(flipSwitchPIN);                  // read the current flipSwitch state
       if (flipSwitchState != lastFlipSwitchState) {                               // if the flipSwitchState has changed...
 #ifdef TACTILE_BUTTON
         if (flipSwitchState) {                                                    // if the tactile button is pressed 
-#endif      
+#endif        
+      Serial.print("flipSwitchPIN:");                   // read the current flipSwitch state
+      Serial.print(flipSwitchPIN);                   // read the current flipSwitch state
+      Serial.print(", lastFlipSwitchState: ");                   // read the current flipSwitch state
+      Serial.print(lastFlipSwitchState);                   // read the current flipSwitch state
+      Serial.print(", flipSwitchState: ");                   // read the current flipSwitch state
+      Serial.println(flipSwitchState); 
           flipSwitch.second.lastFlipSwitchChange = actualMillis;                  // update lastFlipSwitchChange time
           String deviceId = flipSwitch.second.deviceId;                           // get the deviceId from config
           int relayPIN = devices[deviceId].relayPIN;                              // get the relayPIN from config
@@ -173,7 +179,7 @@ void setup()
   setupFlipSwitches();
   setupWiFi();
   setupSinricPro();
-  digitalWrite(RelayPin1,HIGH);
+  Serial.println("setup all");
 }
 
 void loop()

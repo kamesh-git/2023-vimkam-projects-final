@@ -23,6 +23,7 @@ void setup()
 {
   sgsm.begin(9600);
   sgps.begin(9600);
+  pinMode(8,OUTPUT);
   rf_driver.init();
   if(!accel.begin())
    {
@@ -46,6 +47,7 @@ void inpRec()
   accel.getEvent(&event);
   Serial.println(event.acceleration.z);
   if((int)event.acceleration.z < 0){
+    digitalWrite(8,LOW);
     getLoc();
     state = 0;
     infLoop1 = 0;
@@ -57,12 +59,19 @@ void inpRec()
     String buf1 = String((char *)buf);
     Serial.print("Message Received: ");
     Serial.println(buf1);
-    if (buf1 == "on")
+    if (buf1 == "ON")
     {
+    Serial.println("motor:");
+      digitalWrite(8,HIGH);
     }
-    else if (buf1 == "off")
+    else if (buf1 == "OF") 
     {
+     Serial.println("motor:off"); 
+      digitalWrite(8,LOW);
     }
+  }
+  else{
+    Serial.println("NO mSG");
   }
   delay(500);
 }
