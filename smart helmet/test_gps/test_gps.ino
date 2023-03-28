@@ -4,10 +4,14 @@
  */
  
 #include <SoftwareSerial.h>
+#include <TinyGPS.h>
+TinyGPS gps;  
 
 // The serial connection to the GPS module
 SoftwareSerial sgps(4,5);
 SoftwareSerial sgsm(2,3);
+long gpslat, gpslon;
+int state =1;
 
 void setup(){
   Serial.begin(9600);
@@ -18,11 +22,19 @@ void setup(){
 }
 
 void loop(){
-  while (sgps.available() > 0){
+  while (sgps.available() > 0 && state){
+//    if (gps.encode(sgps.read()))
+//      {
+//        gps.get_position(&gpslat, &gpslon);
+//        Serial.println(gpslat);
+//        Serial.println(gpslon);
+//
+//      }
+byte dat = sgps.read();
+Serial.write(dat);
     // get the byte data from the GPS
-    byte gpsData = sgps.read();
-    Serial.write(gpsData);
   }
+  
 
 
 }

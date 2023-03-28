@@ -1,8 +1,7 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial EEBlue(11, 12); // RX | TX
-int IR1 = 8;                   // Right sensor
-int IR2 = 9;                   // left Sensor
+                               // left Sensor
 
 #define enA 10
 #define in1 9
@@ -11,10 +10,17 @@ int IR2 = 9;                   // left Sensor
 #define in4 6
 #define enB 5
 
-int M1_Speed = 80;            // speed of motor 1
-int M2_Speed = 80;            // speed of motor 2
-int LeftRotationSpeed = 250;  // Left Rotation Speed
-int RightRotationSpeed = 250; // Right Rotation Speed
+unsigned long last_time = 0;
+int M1_Speed = 150;           // speed of motor 1
+int M2_Speed = 150;           // speed of motor 2
+int LeftRotationSpeed = 100;  // Left Rotation Speed
+int RightRotationSpeed = 100; // Right Rotation Speed
+int LEFT_SENSOR;
+int RIGHT_SENSOR;
+String inpCmd;
+int state = 0;
+int statedecide = 1;
+char character;
 
 void setup()
 
@@ -34,6 +40,7 @@ void setup()
 
     pinMode(A0, INPUT); // initialize Left sensor as an input
     pinMode(A1, INPUT);
+    delay(10);
 }
 
 void loop()
@@ -42,47 +49,91 @@ void loop()
 
     // Feed any data from bluetooth to Terminal.
 
-    int LEFT_SENSOR = digitalRead(A0);
-    int RIGHT_SENSOR = digitalRead(A1);
+    inpCmd = "";
+    unsigned long now_time = millis();
 
-    if (EEBlue.available())
+    if (state == 0)
     {
-        String inpCmd = EEBlue.readString();
-        Serial.println(inpCmd);
-        if (inpCmd == 'FORWARD')
+        irCheck();
+    }
+    else
+    {
+        bluetoohControl();
+    }
+    if (statedecide)
+    {
+      Serial.print("text:");
+        if (EEBlue.available())
         {
-            forward();
+          
+            state = 1;
+
+            Serial.print("State:");
+            Serial.println(state);
+            
+            statedecide = 0;
         }
-        else if (inpCmd == 'RIGHT')
+        else
         {
-            right();
-        }
-        else if (inpCmd == 'LEFT')
-        {
-            left();
-        }
-        else if (inpCmd == 'BACK')
-        {
-            backward();
-        }
-        else if (inpCmd == 'STOP')
-        {
-            backward();
+            state = 0;
         }
     }
-    else if (RIGHT_SENSOR == 0 && LEFT_SENSOR == 0)
+
+}
+
+void bluetoohControl()
+{
+    while (EEBlue.available())
+    {
+        character = EEBlue.read();
+        Serial.println(character);
+        if (character == ' ')
+        {
+            break;
+        }
+        inpCmd.concat(character);
+    }
+        Serial.println(inpCmd);
+    if (inpCmd == "FRONT")
+    {
+        forward();
+    }
+    else if (inpCmd == "RIGHT")
+    {
+        right();
+    }
+    else if (inpCmd == "LEFT")
+    {
+        left();
+    }
+    else if (inpCmd == "BACK")
+    {
+        backward();
+    }
+    else if (inpCmd == "STOP")
+    {
+        Stop();
+    }
+    delay(100);
+}
+void irCheck()
+{
+    LEFT_SENSOR = digitalRead(A0);
+    RIGHT_SENSOR = digitalRead(A1);
+    if (RIGHT_SENSOR == 0 && LEFT_SENSOR == 0)
     {
         forward(); // FORWARD
     }
 
     else if (RIGHT_SENSOR == 0 && LEFT_SENSOR == 1)
     {
-        right(); // Move Right
+        left(); // Move Right
     }
 
     else if (RIGHT_SENSOR == 1 && LEFT_SENSOR == 0)
     {
-        left(); // Move Left
+
+        right();
     }
 
     else if (RIGHT_SENSOR == 1 && LEFT_SENSOR == 1)
@@ -92,6 +143,7 @@ void loop()
 }
 void forward()
 {
+    Serial.println("inside front");
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
     digitalWrite(in3, HIGH);
@@ -103,6 +155,7 @@ void forward()
 
 void backward()
 {
+    Serial.println("inside back");
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
     digitalWrite(in3, LOW);
@@ -114,8 +167,9 @@ void backward()
 
 void right()
 {
+    Serial.println("inside right");
     digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
+    digitalWrite(in2, LOW);
     digitalWrite(in3, HIGH);
     digitalWrite(in4, LOW);
 
@@ -125,10 +179,11 @@ void right()
 
 void left()
 {
+    Serial.println("inside left");
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
     digitalWrite(in3, LOW);
-    digitalWrite(in4, HIGH);
+    digitalWrite(in4, LOW);
 
     analogWrite(enA, LeftRotationSpeed);
     analogWrite(enB, RightRotationSpeed);
@@ -136,8 +191,11 @@ void left()
 
 void Stop()
 {
+    Serial.println("inside stop");
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
     digitalWrite(in3, LOW);
     digitalWrite(in4, LOW);
+    analogWrite(enA, 0);
+    analogWrite(enB, 0);
 }

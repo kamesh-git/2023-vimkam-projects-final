@@ -14,7 +14,7 @@ void setup()
     // Initialize ASK Object
     rf_driver.init();
     Serial.println("MQ3 Heating Up!");
-//    delay(20000); // allow the MQ3 to warm up
+   delay(20000); // allow the MQ3 to warm up
 }
 
 void loop()
@@ -26,13 +26,11 @@ void loop()
     Serial.println(flexValue);
     Serial.print("sensorValue:");
     Serial.println(sensorValue);
-    if (sensorValue < 250 && flexValue < 150) {
+    if (flexValue < 550 && sensorValue < 550) {
 
-//    Serial.println("Vehicle ON");
     sendMsg("ON");
   }
   else{
-//    Serial.println("Vehicle OFF");
     sendMsg("OF");
   }
 }

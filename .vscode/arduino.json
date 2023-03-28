@@ -1,6 +1,6 @@
 {
-    "configuration": "BoardModel=primo,xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200",
+    "configuration": "BoardModel=unowifideved,xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200",
     "board": "esp8266:esp8266:arduino-esp8266",
-    "sketch": "smart village\\time_calc\\time_calc.ino",
-    "port": "COM7"
+    "sketch": "smart helmet\\bike_reciever\\bike_reciever.ino",
+    "port": "COM6"
 }
