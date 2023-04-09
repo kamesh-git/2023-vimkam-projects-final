@@ -31,7 +31,15 @@ void loop()
   int space = s.indexOf(" ");
   int l = s.length();
   one = s.substring(0, space);
-  two = s.substring(space + 1, l);
+  scnd = s.substring(space + 1, l);
+
+
+  space = scnd.indexOf(" ");
+  l = scnd.length();
+  two = scnd.substring(0, space);
+  three = scnd.substring(space + 1, l);
+
+  
   Blynk.run();
   timer.run();
   Serial.println(one.toInt()+two.toInt());
@@ -43,5 +51,6 @@ void myTimer()
   {
     Blynk.virtualWrite(V0, one.toInt());
     Blynk.virtualWrite(V1, two.toInt());
+    Blynk.virtualWrite(V2, three.toInt());
   }
 }

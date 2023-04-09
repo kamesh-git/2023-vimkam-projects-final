@@ -76,35 +76,35 @@ void loop()
     if (fingerprintID == 1)
     {
         Serial.println("Welcome MANIVEL M");
-        connecthost("MANIVEL M");
+        connecthost("MANIVEL%20M");
         flag = 0;
         handleGate();
     }
     else if (fingerprintID == 2)
     {
         Serial.println("Welcome SATHISH NARAYANAN S");
-        connecthost("SATHISH NARAYANAN S");
+        connecthost("SATHISH%20NARAYANAN%20S ");
         flag = 0;
         handleGate();
     }
     else if (fingerprintID == 3)
     {
         Serial.println("Welcome SAKTHIPRIYAN B");
-        connecthost("SAKTHIPRIYAN B");
+        connecthost("SAKTHIPRIYAN%20B");
         flag = 0;
         handleGate();
     }
     else if (fingerprintID == 4)
     {
         Serial.println("Welcome SANJAI R");
-        connecthost("SANJAI R");
+        connecthost("SANJAI%20R");
         flag = 0;
         handleGate();
     }
     else if (fingerprintID == 5)
     {
         Serial.println("Welcome MOSES EBINIZER C");
-        connecthost("MOSES EBINIZER C");
+        connecthost("MOSES%20EBINIZER%20C");
         flag = 0;
         handleGate();
     }

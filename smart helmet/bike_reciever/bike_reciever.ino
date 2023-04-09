@@ -110,10 +110,10 @@ void simActivate()
                              //
   delay(1000);               // Delay of 1 second
 
-  sgsm.println("AT+CMGS=\"+919840194432\""); // Replace x with mobile number
+  sgsm.println("AT+CMGS=\"+917395965434\""); // Replace x with mobile number
 
   delay(1000); // Delay of 1 second
-  sgsm.print("Venkat is in danger. Kindly help her by touching this link. \n https://maps.google.com/?q="); // Type in the SMS text you want to send
+  sgsm.print("Venkat is in danger. Kindly help him by touching this link. \n https://maps.google.com/?q="); // Type in the SMS text you want to send
   sgsm.print(gpslat / 1000000);
   sgsm.print(".");
   sgsm.print(gpslat % 1000000);

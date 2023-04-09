@@ -2,11 +2,7 @@
 
 SoftwareSerial EEBlue(9, 8); // RX | TX
 
-// power pins
-#define blueVCC 11
-#define blueGND 10
-#define motorVCC 12
-#define motorGND 13
+
 
 #define enA 6
 #define in1 7
@@ -35,14 +31,6 @@ void setup()
     Serial.println("begin");
 
     // power pins
-    pinMode(blueVCC, OUTPUT);
-    pinMode(blueGND, OUTPUT);
-    pinMode(motorVCC, OUTPUT);
-    pinMode(motorGND, OUTPUT);
-    digitalWrite(blueVCC, HIGH);
-    digitalWrite(blueGND, LOW);
-    digitalWrite(motorVCC, HIGH);
-    digitalWrite(motorGND, LOW);
 
     EEBlue.begin(9600); // Default Baud for comm, it may be different for your Module. Serial.println("The bluetooth gates are open.\n Connect to HC-05 from any other bluetooth device with 1234 as pairing key!.");
     pinMode(in1, OUTPUT);
@@ -77,19 +65,21 @@ void loop()
     while (EEBlue.available())
     {
         character = EEBlue.read();
+        Serial.print("recieved:");
         Serial.println(character);
-        if (character == ' ')
+        if (character == ' ' || character == '\n')
         {
             break;
         }
+        inpCmd.concat(character);
     }
-    inpCmd.concat(character);
     inpCmd.replace("*", "");
     inpCmd.replace("#", "");
     inpCmd.toUpperCase();
     Serial.println(inpCmd);
+    Serial.print("distance");
     Serial.println(distance);
-    if(distance < 17){
+    if(distance < 10){
         Stop();
     }
     else if (inpCmd == "FRONT" || inpCmd == "F")

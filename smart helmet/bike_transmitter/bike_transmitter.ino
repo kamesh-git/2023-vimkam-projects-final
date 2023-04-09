@@ -9,40 +9,42 @@ float sensorValue;
 
 void setup()
 {
-    // Setup Serial Monitor
-    Serial.begin(9600);
-    // Initialize ASK Object
-    rf_driver.init();
-    Serial.println("MQ3 Heating Up!");
-   delay(20000); // allow the MQ3 to warm up
+  // Setup Serial Monitor
+  Serial.begin(9600);
+  // Initialize ASK Object
+  rf_driver.init();
+  Serial.println("MQ3 Heating Up!");
+  delay(20000); // allow the MQ3 to warm up
 }
 
 void loop()
 {
-    flexValue = analogRead(flexPin);
-    sensorValue = analogRead(MQ3); // read analog input pin 0
+  flexValue = analogRead(flexPin);
+  sensorValue = analogRead(MQ3); // read analog input pin 0
 
-    Serial.print("flexValue:");
-    Serial.println(flexValue);
-    Serial.print("sensorValue:");
-    Serial.println(sensorValue);
-    if (flexValue < 550 && sensorValue < 550) {
+  Serial.print("flexValue:");
+  Serial.println(flexValue);
+  Serial.print("sensorValue:");
+  Serial.println(sensorValue);
+  if (flexValue < 700 && sensorValue < 550)
+  {
 
     sendMsg("ON");
   }
-  else{
+  else
+  {
     sendMsg("OF");
   }
 }
 
 void sendMsg(char *msg)
 {
-    rf_driver.send((uint8_t *)msg, strlen(msg));
-    rf_driver.waitPacketSent();
-    {
-        // Message Transmitted
-        Serial.print("Message Transmitted: ");
-        Serial.println(msg);
-        delay(1000);
-    }
+  rf_driver.send((uint8_t *)msg, strlen(msg));
+  rf_driver.waitPacketSent();
+  {
+    // Message Transmitted
+    Serial.print("Message Transmitted: ");
+    Serial.println(msg);
+    delay(1000);
+  }
 }

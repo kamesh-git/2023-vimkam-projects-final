@@ -65,7 +65,7 @@ void loop()
   Sim.println("AT+CMGS=\"+919840194432\"");  // Replace x with mobile number
 
   delay(1000);                                 // Delay of 1 second
-  String text = "https://maps.google.com/?q=13.141994,80.114865";
+  String text = "hi vimkam";
   Sim.println(text);     // Type in the SMS text you want to send
 
   delay(100);                                  // Delay of 0.1 second
